@@ -10,16 +10,19 @@ import org.springframework.stereotype.Service;
 
 import com.demo.klef.jfsd.springboot.extra.LoginRequest;
 import com.demo.klef.jfsd.springboot.model.Admin;
+import com.demo.klef.jfsd.springboot.model.CounsellingMapping;
 import com.demo.klef.jfsd.springboot.model.Course;
 import com.demo.klef.jfsd.springboot.model.Faculty;
 import com.demo.klef.jfsd.springboot.model.FacultyCourseMapping;
 import com.demo.klef.jfsd.springboot.model.FacultyLeave;
 import com.demo.klef.jfsd.springboot.model.Student;
 import com.demo.klef.jfsd.springboot.repository.AdminRepository;
+import com.demo.klef.jfsd.springboot.repository.CounsellingRepository;
 import com.demo.klef.jfsd.springboot.repository.CourseRepository;
 import com.demo.klef.jfsd.springboot.repository.FacultyCourseRepository;
 import com.demo.klef.jfsd.springboot.repository.FacultyLeaveRepository;
 import com.demo.klef.jfsd.springboot.repository.FacultyRepository;
+import com.demo.klef.jfsd.springboot.repository.FacultyStudentMappingRepository;
 import com.demo.klef.jfsd.springboot.repository.StudentRepository;
 
 
@@ -41,6 +44,13 @@ public class AdminServiceImpl implements AdminService {
 	  
 	  @Autowired
 	  private FacultyLeaveRepository facultyLeaveRepository;
+	  
+	  
+	  @Autowired
+	  private  CounsellingRepository counsellingRepository;
+
+	  @Autowired
+	  private FacultyStudentMappingRepository facultyStudentMappingRepository;
 	  
 	  //login
 	@Override
@@ -165,7 +175,11 @@ public class AdminServiceImpl implements AdminService {
 	}
 	
 	
-
+	@Override
+	public Faculty viewFById(int fid) {
+		 return facultyRepository.findById(fid)
+			        .orElseThrow(() -> new RuntimeException("faculty not found with id: " + fid));
+	}
 
 
 	@Override
@@ -218,10 +232,8 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public long checkFacultyCourseMapping(Faculty f, Course c, int section) {
-		// TODO Auto-generated method stub
-		return facultyCourseRepository.checkfcoursemapping(f, c, section);
-
+	public long checkFacultyCourseMapping(Faculty f, Course c, int section, String academicYear, String semester) {
+	    return facultyCourseRepository.checkfcoursemapping(f, c, section, academicYear, semester);
 	}
 
 	@Override
@@ -244,6 +256,7 @@ public class AdminServiceImpl implements AdminService {
 		return facultyCourseRepository.findByFaculty(faculty);
 	}
 
+	//Leave
 	
 	@Override
     public String applyLeave(FacultyLeave facultyLeave) {
@@ -257,12 +270,7 @@ public class AdminServiceImpl implements AdminService {
         return facultyLeaveRepository.findAll();
     }
 
-    @Override
-    public List<FacultyLeave> viewStatusByFaculty(int fid) {
-        Faculty faculty = facultyRepository.findById(fid)
-                .orElseThrow(() -> new RuntimeException("Faculty not found with id: " + fid));
-        return facultyLeaveRepository.findByFaculty(faculty);
-    }
+  
 
     @Override
     public FacultyLeave updateStatusLeave(int leaveId, String status) {
@@ -271,19 +279,39 @@ public class AdminServiceImpl implements AdminService {
         leaveRequest.setStatus(status);
         return facultyLeaveRepository.save(leaveRequest);
     }
+    
+    @Override
+    public List<FacultyLeave> viewStatusByFaculty(int fid) {
+        Faculty faculty = facultyRepository.findById(fid)
+                .orElseThrow(() -> new RuntimeException("Faculty not found with id: " + fid));
+        return facultyLeaveRepository.findByFaculty(faculty);
+    }
 
-	@Override
-	public Faculty viewFById(int fid) {
-		 return facultyRepository.findById(fid)
-			        .orElseThrow(() -> new RuntimeException("Student not found with id: " + fid));
-	}
-
-
-
-
-
+	
 
 
+
+
+//COunselling
+    
+    @Override
+    public String mapFacultyToStudent(int facultyId, int studentId) {
+        Faculty faculty = facultyRepository.findById(facultyId)
+                .orElseThrow(() -> new RuntimeException("Faculty not found with id: " + facultyId));
+        Student student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new RuntimeException("Student not found with id: " + studentId));
+
+        if (counsellingRepository.existsByStudent(student)) {
+            return "Mapping already exists for this student";
+        }
+
+        CounsellingMapping mapping = new CounsellingMapping();
+        mapping.setFaculty(faculty);
+        mapping.setStudent(student);
+        counsellingRepository.save(mapping);
+
+        return "Faculty mapped to student successfully";
+    }
 
 
 	

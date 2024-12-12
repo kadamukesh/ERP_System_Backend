@@ -22,6 +22,7 @@ public interface FacultyRepository extends JpaRepository<Faculty, Integer>
 	  
 	  Optional<Faculty> findByPassword(String pass);
 	  
+	  //v
 	  
 	 
 }

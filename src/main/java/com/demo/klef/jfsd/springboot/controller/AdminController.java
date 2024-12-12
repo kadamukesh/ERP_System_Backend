@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -37,8 +37,9 @@ import com.demo.klef.jfsd.springboot.service.AdminService;
 
  // 
 //frontend is running on port 3000
-@CrossOrigin
+
 @ResponseBody
+@CrossOrigin
 public class AdminController {
 
 	
@@ -218,15 +219,17 @@ public ResponseEntity<List<Course>> displayC() {
     return ResponseEntity.ok(courses);
 }
 
+
 @PostMapping("/fcoursemapping")
 public ResponseEntity<Map<String, String>> insertFacultyCourseMapping(@RequestBody Map<String, Object> payload) {
     Map<String, String> response = new HashMap<>();
     try {
-      
         int fid = Integer.parseInt(payload.get("fid").toString());
         int cid = Integer.parseInt(payload.get("cid").toString());
         int section = Integer.parseInt(payload.get("section").toString());
         String ftype = payload.get("ftype").toString();
+        String academicYear = payload.get("academicYear").toString();
+        String semester = payload.get("semester").toString();
 
         Faculty faculty = adminService.displayFacultyById(fid);
         Course course = adminService.displayCourseById(cid);
@@ -236,7 +239,7 @@ public ResponseEntity<Map<String, String>> insertFacultyCourseMapping(@RequestBo
             return ResponseEntity.badRequest().body(response);
         }
 
-        long existingMapping = adminService.checkFacultyCourseMapping(faculty, course, section);
+        long existingMapping = adminService.checkFacultyCourseMapping(faculty, course, section, academicYear, semester);
         if (existingMapping > 0) {
             response.put("message", "Mapping Already Done");
         } else {
@@ -246,6 +249,8 @@ public ResponseEntity<Map<String, String>> insertFacultyCourseMapping(@RequestBo
             fcm.setCourse(course);
             fcm.setSection(section);
             fcm.setFacultytype(ftype);
+            fcm.setAcademicYear(academicYear);
+            fcm.setSemester(semester);
 
             adminService.facultyCourseMapping(fcm);
             response.put("message", "Faculty Course Mapping Done");
@@ -260,7 +265,6 @@ public ResponseEntity<Map<String, String>> insertFacultyCourseMapping(@RequestBo
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
     }
 }
-
 
 
 
@@ -347,6 +351,17 @@ public ResponseEntity<String> applyLeave(@RequestBody Map<String, Object> leaveD
       }
   }
 
+//Counselling
+@PostMapping("/map-counselling")
+public ResponseEntity<Map<String, String>> mapFacultyToStudent(@RequestBody Map<String, Integer> payload) {
+    int facultyId = payload.get("facultyId");
+    int studentId = payload.get("studentId");
 
+    String result = adminService.mapFacultyToStudent(facultyId, studentId);
+
+    Map<String, String> response = new HashMap<>();
+    response.put("message", result);
+    return ResponseEntity.ok(response);
+}
 
 }

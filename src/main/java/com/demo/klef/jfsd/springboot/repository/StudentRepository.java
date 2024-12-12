@@ -8,6 +8,8 @@ import org.springframework.stereotype.Repository;
 
 import com.demo.klef.jfsd.springboot.model.Faculty;
 import com.demo.klef.jfsd.springboot.model.Student;
+import java.util.List;
+
 
 @Repository
 @EnableJpaRepositories
@@ -20,6 +22,7 @@ public interface StudentRepository extends JpaRepository<Student, Integer>
 	  public Student findByUidAndPassword(String uid, String password);
 	  
 	  Optional<Student> findByPassword(String pass);
+	  
 	  
 	 
 }

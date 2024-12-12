@@ -14,6 +14,9 @@ public interface FeedbackRepository extends JpaRepository<Feedback, Integer> {
 	List<Feedback> findByFacultyAndCourse(Faculty faculty, Course course);
 	
     boolean existsByFacultyIdAndSection(int facultyId, int section);
+    
+    //v
+ 
 
 }
 

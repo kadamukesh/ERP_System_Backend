@@ -47,7 +47,8 @@ public interface AdminService
 	 public String facultyCourseMapping(FacultyCourseMapping fcm);
 	  public List<FacultyCourseMapping> displayFacultyCourseMapping();
 	  
-	  public long checkFacultyCourseMapping(Faculty f,Course c,int section);
+	  
+	  public long checkFacultyCourseMapping(Faculty f, Course c, int section, String academicYear, String semester);
 	  
 	  public Faculty displayFacultyById(int fid);
 	  public Course displayCourseById(int cid);
@@ -60,7 +61,10 @@ public interface AdminService
 	  public FacultyLeave updateStatusLeave(int leaveid,String status);
 	  public List<FacultyLeave>displayAllLeaves();
 	  public List<FacultyLeave>viewStatusByFaculty(int fid);
-
+	  
+	  
+//Counselling
+	  public String mapFacultyToStudent(int facultyId, int studentId);
 	
 	
 	

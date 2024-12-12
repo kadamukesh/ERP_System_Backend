@@ -1,10 +1,13 @@
 package com.demo.klef.jfsd.springboot.model;
 
+
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+
 import jakarta.persistence.Table;
 
 @Entity
@@ -27,6 +30,18 @@ public class Course
 	  
 	  @Column(nullable = false)
 	  private double credits;
+	
+	  
+
+	  
+	    
+	    @Column(nullable = false)
+	    private String department;
+	  
+
+
+	  
+	  
 
 	public int getCourseid() {
 		return courseid;
@@ -67,4 +82,16 @@ public class Course
 	public void setCredits(double credits) {
 		this.credits = credits;
 	}
+
+
+
+
+	public String getDepartment() {
+		return department;
+	}
+
+	public void setDepartment(String department) {
+		this.department = department;
+	}
+
 }

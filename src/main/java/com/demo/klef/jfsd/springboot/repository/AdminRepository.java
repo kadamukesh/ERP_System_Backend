@@ -14,5 +14,5 @@ public interface AdminRepository extends JpaRepository<Admin, String> {
 		//for login
 	  public Admin findByUsernameAndPassword(String username, String password);
 
-	 
+	 //Counselling
 }
