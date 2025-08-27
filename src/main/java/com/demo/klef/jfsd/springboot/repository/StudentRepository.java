@@ -15,11 +15,11 @@ import java.util.List;
 @EnableJpaRepositories
 public interface StudentRepository extends JpaRepository<Student, Integer>
 {
-	 boolean existsByUid(String uid);
+	 boolean existsByUid(String uid);//exist or not
 	 
-	 Optional<Student> findByUid(String uid);
+	 Optional<Student> findByUid(String uid);//finding that record
 	 
-	  public Student findByUidAndPassword(String uid, String password);
+	  public Student findByUidAndPassword(String uid, String password);//login
 	  
 	  Optional<Student> findByPassword(String pass);
 	  

@@ -160,7 +160,8 @@ public class AdminController {
     }
 
     @GetMapping("viewfaculty")
-    public ResponseEntity<List<Faculty>> displayF() {
+    public ResponseEntity<List<Faculty>> displayF()  //Use ResponseEntity<?> in Spring Boot when you need to customize the HTTP status
+    {
         List<Faculty> faculty = adminService.viewallF();
         return ResponseEntity.ok(faculty);
     }
